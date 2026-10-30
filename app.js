@@ -153,16 +153,23 @@ function render(resetPaging) {
   more.hidden = filtered.length <= state.shown;
 }
 
+// The API returns at most 1000 rows per request, so read in pages until a short page comes back.
 async function load() {
   const status = document.getElementById('status');
   status.textContent = '공고를 불러오는 중이에요...';
-  const url = `${SUPABASE_URL}/rest/v1/listings` +
+  const base = `${SUPABASE_URL}/rest/v1/listings` +
     `?select=id,source,title,url,region,category,type,media,reward,recruit_count,applicant_count,apply_end` +
     `&or=(apply_end.gte.${state.today},apply_end.is.null)` +
-    `&order=apply_end.asc.nullslast&limit=3000`;
-  const res = await fetch(url, { headers: { apikey: PUBLISHABLE_KEY } });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  state.rows = (await res.json()).map(enrich);
+    `&order=apply_end.asc.nullslast,id.asc`;
+  const all = [];
+  for (let offset = 0; ; offset += 1000) {
+    const res = await fetch(`${base}&limit=1000&offset=${offset}`, { headers: { apikey: PUBLISHABLE_KEY } });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const page = await res.json();
+    all.push(...page);
+    if (page.length < 1000) break;
+  }
+  state.rows = all.map(enrich);
 }
 
 function bind() {
