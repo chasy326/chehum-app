@@ -111,7 +111,14 @@ function sortRows(list, sort) {
     return x < y ? -1 : x > y ? 1 : 0;
   };
   const copy = [...list];
-  if (sort === 'deadline') copy.sort((a, b) => cmpNullLast(a, b, 'apply_end'));
+  if (sort === 'deadline') copy.sort((a, b) => {
+    const rank = (r) => r.dday === null ? 2 : r.dday < 0 ? 1 : 0;
+    const rankDiff = rank(a) - rank(b);
+    if (rankDiff) return rankDiff;
+    // 진행 중 공고는 가까운 마감순, 마감 공고는 최근 마감순, 마감일 미정은 마지막.
+    if (rank(a) === 1) return cmpNullLast(b, a, 'apply_end');
+    return cmpNullLast(a, b, 'apply_end');
+  });
   if (sort === 'new') copy.sort((a, b) => b.id - a.id);
   if (sort === 'recruit') copy.sort((a, b) => (b.recruit_count || 0) - (a.recruit_count || 0));
   if (sort === 'competition') copy.sort((a, b) => ratio(a) - ratio(b));
@@ -159,7 +166,6 @@ async function load() {
   status.textContent = '공고를 불러오는 중이에요...';
   const base = `${SUPABASE_URL}/rest/v1/listings` +
     `?select=id,source,title,url,region,category,type,media,reward,recruit_count,applicant_count,apply_end` +
-    `&or=(apply_end.gte.${state.today},apply_end.is.null)` +
     `&order=apply_end.asc.nullslast,id.asc`;
   const all = [];
   for (let offset = 0; ; offset += 1000) {
