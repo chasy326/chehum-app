@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>체험단 한눈에</title>
+  <meta name="description" content="여러 체험단 사이트의 공고를 한 곳에서 보고, 신청은 원본 사이트에서 합니다.">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>체험단 한눈에</h1>
+    <p class="sub">신청은 원본 사이트에서 해요</p>
+  </header>
+
+  <section class="filters" aria-label="필터">
+    <input id="q" type="search" placeholder="제목이나 지역 검색" autocomplete="off">
+    <div class="row">
+      <select id="sido" aria-label="지역"></select>
+      <select id="type" aria-label="유형"></select>
+      <select id="media" aria-label="매체"></select>
+    </div>
+    <div class="row">
+      <select id="category" aria-label="카테고리"></select>
+      <select id="source" aria-label="사이트"></select>
+      <select id="sort" aria-label="정렬">
+        <option value="deadline">마감 임박순</option>
+        <option value="new">최근 등록순</option>
+        <option value="recruit">모집 인원 많은순</option>
+        <option value="competition">경쟁 낮은순</option>
+      </select>
+    </div>
+    <label class="toggle"><input id="hideClosed" type="checkbox" checked> 마감된 공고 숨기기</label>
+  </section>
+
+  <p id="status" class="status" role="status"></p>
+  <main id="list" class="list" aria-live="polite"></main>
+  <div class="more"><button id="more" type="button" hidden>더 보기</button></div>
+
+  <footer class="foot">
+    <p>공고는 각 사이트 공개 페이지에서 모아 보여줘요. 정보가 틀렸거나 바로 반영되지 않을 수 있어요. 신청과 선정은 원본 사이트에서 진행돼요.</p>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

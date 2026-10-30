@@ -1,0 +1,14 @@
+{
+  "name": "체험단 한눈에",
+  "short_name": "체험단",
+  "description": "여러 체험단 사이트의 공고를 한 곳에서 보고, 신청은 원본 사이트에서 해요.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f8",
+  "theme_color": "#2563eb",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
